@@ -115,8 +115,12 @@ int main(void)
 	  {
 		  /* Toggle output to LED every LPIT0 timeout */
 		while (0 == (IP_LPIT0->MSR & LPIT_MSR_TIF0_MASK)) {} /* Wait for LPIT0 CH0 Flag */
+		/*Channel 0 Timer Interrupt Flag:
+		 In compare modes: at the end of the timer period, the channel timer interrupt flag is set to 1
+		  */
 		lpit0_ch0_flag_counter++;         /* Increment LPIT0 timeout counter */
 		IP_PTD->PTOR |= 1<<0;                /* Toggle output on port D0 (blue LED) */
-		IP_LPIT0->MSR |= LPIT_MSR_TIF0_MASK; /* Clear LPIT0 timer flag 0 */
+		IP_LPIT0->MSR |= LPIT_MSR_TIF0_MASK; /* Clear LPIT0 timer flag 0.
+		To clear a channel timer interrupt flag, write logic 1 to it */
 	  }
 }
